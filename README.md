@@ -1,6 +1,6 @@
 # falconre
 
-Falconre is python3 library using [pyo3](https://github.com/PyO3/pyo3) to wrap:
+Falconre is a python3 library using [pyo3](https://github.com/PyO3/pyo3) to wrap:
 
   * [Falcon](https://github.com/falconre/falcon) - A binary analysis framework in Rust
   * [Finch](https://github.com/falconre/finch) - A symbolic executor built on Falcon
