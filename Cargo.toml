@@ -1,0 +1,24 @@
+[package]
+name = "falconre"
+version = "0.1.0"
+authors = ["endeavor <endeavor@rainbowsandpwnies.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+falcon = "0.4.11"
+falcon-raptor = "0.4.9"
+falcon-finch = "0.4.6"
+serde_json = "1.0"
+
+[dependencies.pyo3]
+version = "0.9.0-alpha.1"
+features = ["extension-module"]
+
+[lib]
+name = "falconre"
+crate-type = ["cdylib"]
+
+[features]
+capstone4 = ["falcon/capstone4", "falcon-raptor/capstone4", "falcon-finch/capstone4"]
