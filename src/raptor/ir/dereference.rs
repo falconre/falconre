@@ -3,7 +3,7 @@ use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Clone)]
+#[derive(Clone, Eq, Hash, PartialEq)]
 pub struct Dereference {
     pub(crate) dereference: raptor::ir::Dereference<raptor::ir::Constant>,
 }
@@ -27,6 +27,14 @@ impl<'p> PyObjectProtocol<'p> for Dereference {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.dereference.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
     }
 }
 

@@ -45,6 +45,7 @@ pub struct ConstantMemory {
 
 #[pymethods]
 impl ConstantMemory {
+    #[new]
     fn new(endian: &Endian) -> ConstantMemory {
         ConstantMemory {
             memory: Memory::<falcon::il::Constant>::new(endian),
@@ -77,6 +78,7 @@ pub struct ExpressionMemory {
 
 #[pymethods]
 impl ExpressionMemory {
+    #[new]
     fn new(endian: &Endian) -> ExpressionMemory {
         ExpressionMemory {
             memory: Memory::new(endian),

@@ -36,7 +36,7 @@ pub(crate) fn reaching_definitions(
 pub(crate) fn use_def(
     function: &il::Function,
 ) -> PyResult<HashMap<il::ProgramLocation, LocationSet>> {
-    map_err(falcon::analysis::def_use(&function.function)).map(|rd| {
+    map_err(falcon::analysis::use_def(&function.function)).map(|rd| {
         rd.into_iter()
             .map(|(pl, ls)| (pl.into(), ls.into()))
             .collect()

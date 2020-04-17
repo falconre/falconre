@@ -25,6 +25,12 @@ impl Function {
         self.function.index()
     }
 
+    fn control_flow_graph(&self) -> ir::ControlFlowGraph {
+        ir::ControlFlowGraph {
+            control_flow_graph: self.function.control_flow_graph().clone().into(),
+        }
+    }
+
     fn name(&self) -> &str {
         self.function.name()
     }
@@ -34,6 +40,18 @@ impl Function {
             .blocks()
             .into_iter()
             .map(|block| block.clone().into())
+            .collect()
+    }
+
+    fn block(&self, index: usize) -> PyResult<ir::Block> {
+        map_err(self.function.block(index)).map(|block| block.clone().into())
+    }
+
+    fn edges(&self) -> Vec<ir::Edge> {
+        self.function
+            .edges()
+            .into_iter()
+            .map(|edge| edge.clone().into())
             .collect()
     }
 }

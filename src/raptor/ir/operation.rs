@@ -37,6 +37,18 @@ impl Operation {
     fn call(&self) -> Option<ir::Call> {
         self.operation.call().map(|call| call.clone().into())
     }
+
+    fn src(&self) -> Option<ir::Expression> {
+        self.operation.src().map(|e| e.clone().into())
+    }
+
+    fn dst(&self) -> Option<ir::Variable> {
+        self.operation.dst().map(|e| e.clone().into())
+    }
+
+    fn index(&self) -> Option<ir::Expression> {
+        self.operation.index().map(|e| e.clone().into())
+    }
 }
 
 #[pyproto]

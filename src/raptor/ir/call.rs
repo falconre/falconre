@@ -3,6 +3,7 @@ use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
+#[derive(Eq, Hash, PartialEq)]
 pub struct CallTarget {
     pub(crate) call_target: raptor::ir::CallTarget<raptor::ir::Constant>,
 }
@@ -39,6 +40,7 @@ impl From<raptor::ir::CallTarget<raptor::ir::Constant>> for CallTarget {
 }
 
 #[pyclass]
+#[derive(Eq, Hash, PartialEq)]
 pub struct Call {
     pub(crate) call: raptor::ir::Call<raptor::ir::Constant>,
 }
@@ -57,6 +59,18 @@ impl Call {
                 .collect()
         })
     }
+
+    fn variables_written(&self) -> Option<Vec<ir::Variable>> {
+        self.call
+            .variables_written()
+            .map(|vr| vr.into_iter().map(|v| v.clone().into()).collect())
+    }
+
+    fn variables_read(&self) -> Option<Vec<ir::Variable>> {
+        self.call
+            .variables_read()
+            .map(|vr| vr.into_iter().map(|v| v.clone().into()).collect())
+    }
 }
 
 #[pyproto]
@@ -67,6 +81,14 @@ impl<'p> PyObjectProtocol<'p> for Call {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.call.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
     }
 }
 

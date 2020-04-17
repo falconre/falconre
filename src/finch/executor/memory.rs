@@ -13,11 +13,13 @@ pub struct Memory {
 impl Memory {
     #[new]
     fn new(endian: &Endian) -> Memory {
+        let endian: falcon::architecture::Endian = endian.endian.clone();
         Memory {
-            memory: finch::executor::Memory::new(endian.endian.clone()),
+            memory: finch::executor::Memory::new(endian),
         }
     }
 
+    #[staticmethod]
     fn new_with_backing(
         endian: &Endian,
         backing: &crate::falcon::memory::backing::Memory,

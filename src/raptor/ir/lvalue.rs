@@ -2,8 +2,11 @@ use crate::map_err;
 use crate::raptor::ir;
 use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 #[pyclass]
+#[derive(Eq, Hash, PartialEq)]
 pub struct LValue {
     pub(crate) lvalue: raptor::ir::LValue<raptor::ir::Constant>,
 }
@@ -49,6 +52,12 @@ impl<'p> PyObjectProtocol<'p> for LValue {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.lvalue.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
     }
 }
 

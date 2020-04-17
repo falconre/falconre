@@ -1,1 +1,1 @@
-from falconre.falconre import falcon, finch
+from falconre.falconre import falcon, finch, raptor

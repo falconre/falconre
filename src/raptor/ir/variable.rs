@@ -1,9 +1,13 @@
 use crate::map_err;
 use crate::raptor::ir;
+use pyo3::class::basic::CompareOp;
 use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 #[pyclass]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct Variable {
     pub(crate) variable: raptor::ir::Variable,
 }
@@ -27,6 +31,16 @@ impl Variable {
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.variable))
     }
+
+    fn debug(&self) -> String {
+        format!("{:?}", self.variable)
+    }
+
+    fn e(&self) -> ir::Expression {
+        ir::Expression {
+            expression: self.variable.clone().into(),
+        }
+    }
 }
 
 #[pyproto]
@@ -37,6 +51,19 @@ impl<'p> PyObjectProtocol<'p> for Variable {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.variable.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
+    }
+
+    fn __richcmp__(&self, other: Variable, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Eq => Ok(*self == other),
+            _ => Ok(false),
+        }
     }
 }
 

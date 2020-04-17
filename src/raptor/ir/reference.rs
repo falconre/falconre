@@ -1,9 +1,11 @@
 use crate::map_err;
 use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 #[pyclass]
-#[derive(Clone)]
+#[derive(Clone, Eq, Hash, PartialEq)]
 pub struct Reference {
     pub(crate) reference: raptor::ir::Reference<raptor::ir::Constant>,
 }
@@ -27,6 +29,12 @@ impl<'p> PyObjectProtocol<'p> for Reference {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.reference.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
     }
 }
 

@@ -28,6 +28,12 @@ impl Program {
         self.program.function(index).map(|f| f.clone().into())
     }
 
+    fn function_by_name(&self, name: &str) -> Option<Function> {
+        self.program
+            .function_by_name(name)
+            .map(|f| f.clone().into())
+    }
+
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.program))
     }

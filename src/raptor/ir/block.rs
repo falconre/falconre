@@ -3,6 +3,7 @@ use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
+#[derive(Eq, Hash, PartialEq)]
 pub struct Block {
     pub(crate) block: raptor::ir::Block<raptor::ir::Constant>,
 }
@@ -11,6 +12,12 @@ pub struct Block {
 impl Block {
     fn index(&self) -> usize {
         self.block.index()
+    }
+
+    fn instruction(&self, index: usize) -> Option<ir::Instruction> {
+        self.block
+            .instruction(index)
+            .map(|instruction| instruction.clone().into())
     }
 
     fn instructions(&self) -> Vec<ir::Instruction> {
@@ -30,6 +37,14 @@ impl<'p> PyObjectProtocol<'p> for Block {
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.block.to_string())
+    }
+
+    fn __hash__(&self) -> PyResult<isize> {
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        let mut s = DefaultHasher::new();
+        self.hash(&mut s);
+        Ok(s.finish() as isize)
     }
 }
 

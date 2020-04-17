@@ -1,5 +1,8 @@
-/target
+target
 Cargo.lock
 build
 falconre.egg-info
 dist
+.vscode/settings.json
+venv
+examples-wip
