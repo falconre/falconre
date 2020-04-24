@@ -24,6 +24,14 @@ impl Program {
             .map(|function| function.clone().into())
             .collect()
     }
+
+    fn function_by_address(&self, address: u64) -> Option<ir::Function> {
+        self.program
+            .functions()
+            .into_iter()
+            .find(|function| function.address() == address)
+            .map(|function| function.clone().into())
+    }
 }
 
 impl From<raptor::ir::Program<raptor::ir::Constant>> for Program {

@@ -36,6 +36,20 @@ impl State {
         self.state.scalars()
     }
 
+    fn path_constraints(&self) -> Vec<il::Expression> {
+        self.state
+            .path_constraints()
+            .into_iter()
+            .map(|constraint| il::Expression {
+                expression: constraint.clone(),
+            })
+            .collect()
+    }
+
+    fn add_path_constraint(&mut self, constraint: &il::Expression) -> PyResult<()> {
+        map_err(self.state.add_path_constraint(&constraint.expression))
+    }
+
     fn symbolize_expression(&self, expression: &il::Expression) -> PyResult<il::Expression> {
         map_err(self.state.symbolize_expression(&expression.expression)).map(|expr| expr.into())
     }
@@ -48,6 +62,10 @@ impl State {
     fn symbolize_and_eval(&self, expression: &il::Expression) -> PyResult<Option<il::Constant>> {
         map_err(self.state.symbolize_and_eval(&expression.expression))
             .map(|option_constant| option_constant.map(|constant| constant.into()))
+    }
+
+    fn symbolize_and_assert(&self, constraint: &il::Expression) -> PyResult<bool> {
+        map_err(self.state.symbolize_and_assert(&constraint.expression))
     }
 
     fn execute(&self, operation: &il::Operation) -> PyResult<Vec<Successor>> {

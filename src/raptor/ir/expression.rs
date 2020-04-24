@@ -39,6 +39,18 @@ impl Expression {
             .map(|stack_variable| stack_variable.clone().into())
     }
 
+    fn reduce(&self) -> PyResult<Expression> {
+        map_err(raptor::ir::reduce(&self.expression).map(|e| e.clone().into()))
+    }
+
+    fn eval(&self) -> PyResult<ir::Constant> {
+        map_err(raptor::ir::eval(&self.expression).map(|c| c.clone().into()))
+    }
+
+    fn all_constants(&self) -> bool {
+        self.expression.all_constants()
+    }
+
     fn lhs(&self) -> Option<Expression> {
         match &self.expression {
             raptor::ir::Expression::Add(lhs, _)

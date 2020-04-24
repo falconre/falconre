@@ -2,7 +2,7 @@ use crate::map_err;
 use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
-use super::Scalar;
+use super::{Expression, Scalar};
 
 #[pyclass]
 pub struct Operation {
@@ -33,6 +33,36 @@ impl Operation {
 
     fn is_nop(&self) -> bool {
         self.operation.is_nop()
+    }
+
+    fn dst(&self) -> Option<Scalar> {
+        match &self.operation {
+            falcon::il::Operation::Load { dst, .. } | falcon::il::Operation::Assign { dst, .. } => {
+                Some(Scalar {
+                    scalar: dst.clone(),
+                })
+            }
+            _ => None,
+        }
+    }
+
+    fn index(&self) -> Option<Expression> {
+        match &self.operation {
+            falcon::il::Operation::Load { index, .. }
+            | falcon::il::Operation::Store { index, .. } => Some(Expression {
+                expression: index.clone(),
+            }),
+            _ => None,
+        }
+    }
+
+    fn target(&self) -> Option<Expression> {
+        match &self.operation {
+            falcon::il::Operation::Branch { target } => Some(Expression {
+                expression: target.clone(),
+            }),
+            _ => None,
+        }
     }
 
     fn scalars_read(&self) -> Option<Vec<Scalar>> {

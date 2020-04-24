@@ -362,8 +362,7 @@ dependencies = [
 [[package]]
 name = "falcon-raptor"
 version = "0.4.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d94a16250d94bb4631a7db2f91efac9ffd442b157e6326b265de45a73e229456"
+source = "git+https://github.com/falconre/raptor#c1a65464f6f3bc643cd5ef0b1f732fa4039666f2"
 dependencies = [
  "error-chain",
  "falcon",

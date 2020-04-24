@@ -49,6 +49,10 @@ impl Operation {
     fn index(&self) -> Option<ir::Expression> {
         self.operation.index().map(|e| e.clone().into())
     }
+
+    fn target(&self) -> Option<ir::Expression> {
+        self.operation.target().map(|e| e.clone().into())
+    }
 }
 
 #[pyproto]

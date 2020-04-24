@@ -51,6 +51,12 @@ impl Driver {
             })
     }
 
+    fn program(&self) -> il::Program {
+        il::Program {
+            program: self.driver.program().clone(),
+        }
+    }
+
     fn state(&self) -> State {
         State {
             state: self.driver.state().clone(),
@@ -59,5 +65,9 @@ impl Driver {
 
     fn set_state(&mut self, state: &State) {
         *self.driver.state_mut() = state.state.clone();
+    }
+
+    fn set_location(&mut self, location: &il::ProgramLocation) {
+        self.driver.set_location(location.program_location.clone());
     }
 }

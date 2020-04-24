@@ -47,6 +47,14 @@ impl Function {
         map_err(self.function.block(index)).map(|block| block.clone().into())
     }
 
+    fn instructions(&self) -> Vec<ir::Instruction> {
+        self.function
+            .instructions()
+            .into_iter()
+            .map(|instruction| instruction.clone().into())
+            .collect()
+    }
+
     fn edges(&self) -> Vec<ir::Edge> {
         self.function
             .edges()
