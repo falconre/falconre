@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+
+'''
+    This is a quick and dirty script that takes a binary, and the address of a
+    function. It walks that function, and every function called by that
+    function, recursively, printing out information about functions called.
+    
+    This is a good, quick way of checking how many external dependencies a
+    function will require to run.
+'''
+
+from log import *
+import cxxfilt
+import falconre
+import sys
+import time
+
+filename = sys.argv[1]
+address = int(sys.argv[2], 0)
+
+info("Analyzing {} function 0x{:x}".format(filename, address))
+elf = falconre.falcon.loader.Elf(filename)
+
+elf.add_user_function(address)
+
+start_time = time.time()
+program, translation_errors = elf.program_recursive_verbose()
+lifted_time = time.time()
+program = falconre.raptor.translate_program_parallel(elf, program)
+translated_time = time.time()
+
+info("Lifted in {}s".format(lifted_time - start_time))
+info("Translated in {}s".format(translated_time - lifted_time))
+
+for translation_error in translation_errors:
+    function_entry, error = translation_error
+    error("{}: {}".format(function_entry, error))
+
+if len(translation_errors) == 0:
+    success("No translation errors!")
+
+def function_calls(function):
+    calls = filter(lambda i: i.operation().type() == "call", function.instructions())
+    calls = map(lambda i: i.operation().call(), calls)
+    return list(calls)
+
+def function_branch_targets(function):
+    branches = filter(lambda i: i.operation().type() == "branch", function.instructions())
+    branch_targets = map(lambda i: i.operation().target(), branches)
+    return branch_targets
+
+function = program.function_by_address(address)
+
+def check_function(function, function_ids_checked=[], depth=0):
+    function_ids_checked.append(function.index())
+
+    magenta("{}{}".format(" " * depth, function.name()))
+
+    depth += 1
+
+    for call in function_calls(function):
+        symbol = call.target().symbol()
+        if symbol:
+            warn("{}{}".format(" " * depth, cxxfilt.demangle(symbol)))
+        else:
+            success("{}{}".format(" " * depth, call))
+            target = call.target().expression()
+            if target and target.all_constants():
+                function = program.function_by_address(target.eval().value_u64())
+                if function.index() not in function_ids_checked:
+                    check_function(function, function_ids_checked, depth + 1)
+                else:
+                    info("{} {}".format(" " * depth, "already checked"))
+
+check_function(function)
