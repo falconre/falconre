@@ -47,16 +47,16 @@ fn translate_program_parallel(
             .program
             .functions()
             .par_iter()
-            .map(|function| function_translator.translate_function(&function))
+            .map(|function| function_translator.translate_function(function))
             .try_fold(
-                || Vec::new(),
+                Vec::new,
                 |mut functions, function| {
                     functions.push(function?);
                     Ok(functions)
                 },
             )
             .try_reduce(
-                || Vec::new(),
+                Vec::new,
                 |mut l, mut r| {
                     l.append(&mut r);
                     Ok(l)
@@ -73,7 +73,7 @@ fn translate_program_parallel(
         &elf.elf,
     ))?;
 
-    let functions = translate(program_translator.function_translator(), &program)?;
+    let functions = translate(program_translator.function_translator(), program)?;
 
     let mut program = raptor::ir::Program::new();
     for function in functions {
@@ -81,7 +81,7 @@ fn translate_program_parallel(
         program.replace_function(index, function);
     }
 
-    Ok(ir::Program { program: program })
+    Ok(ir::Program { program })
 }
 
 #[pymodule]

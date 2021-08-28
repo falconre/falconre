@@ -57,7 +57,7 @@ impl Expression {
             | raptor::ir::Expression::Cmpneq(lhs, _)
             | raptor::ir::Expression::Cmpltu(lhs, _)
             | raptor::ir::Expression::Cmplts(lhs, _) => Some(Expression {
-                expression: lhs.as_ref().clone().into(),
+                expression: lhs.as_ref().clone(),
             }),
             raptor::ir::Expression::LValue(_)
             | raptor::ir::Expression::RValue(_)
@@ -86,7 +86,7 @@ impl Expression {
             | raptor::ir::Expression::Cmpneq(_, rhs)
             | raptor::ir::Expression::Cmpltu(_, rhs)
             | raptor::ir::Expression::Cmplts(_, rhs) => Some(Expression {
-                expression: rhs.as_ref().clone().into(),
+                expression: rhs.as_ref().clone(),
             }),
             raptor::ir::Expression::LValue(_)
             | raptor::ir::Expression::RValue(_)

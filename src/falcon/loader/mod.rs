@@ -124,7 +124,7 @@ impl Options {
     fn manual_edges(&self) -> Vec<ManualEdge> {
         self.options
             .manual_edges()
-            .into_iter()
+            .iter()
             .map(|m| m.clone().into())
             .collect()
     }
@@ -255,7 +255,7 @@ impl Elf {
         &self,
         options: &Options,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.elf.falconre_program_verbose(&options)
+        self.elf.falconre_program_verbose(options)
     }
 
     fn program_recursive(&self) -> PyResult<il::Program> {
@@ -266,7 +266,7 @@ impl Elf {
         &self,
         options: &Options,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.elf.falconre_program_recursive_verbose(&options)
+        self.elf.falconre_program_recursive_verbose(options)
     }
 }
 
@@ -321,7 +321,7 @@ impl Pe {
         &self,
         options: &Options,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.pe.falconre_program_verbose(&options)
+        self.pe.falconre_program_verbose(options)
     }
 
     fn program_recursive(&self) -> PyResult<il::Program> {
@@ -332,7 +332,7 @@ impl Pe {
         &self,
         options: &Options,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.pe.falconre_program_recursive_verbose(&options)
+        self.pe.falconre_program_recursive_verbose(options)
     }
 }
 

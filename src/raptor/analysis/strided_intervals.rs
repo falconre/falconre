@@ -31,7 +31,7 @@ pub struct StridedInterval {
 
 impl From<raptor::analysis::strided_intervals::State> for StridedIntervals {
     fn from(state: raptor::analysis::strided_intervals::State) -> StridedIntervals {
-        StridedIntervals { state: state }
+        StridedIntervals { state }
     }
 }
 
@@ -74,7 +74,7 @@ impl From<raptor::analysis::strided_intervals::StridedInterval> for StridedInter
         strided_interval: raptor::analysis::strided_intervals::StridedInterval,
     ) -> StridedInterval {
         StridedInterval {
-            strided_interval: strided_interval,
+            strided_interval,
         }
     }
 }

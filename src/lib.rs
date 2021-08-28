@@ -6,7 +6,7 @@ pub mod finch;
 pub mod raptor;
 
 pub fn map_err<V, E: std::error::Error>(r: Result<V, E>) -> PyResult<V> {
-    Ok(r.map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))?)
+    r.map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))
 }
 
 pub fn str_err<S: Into<String>>(s: S) -> pyo3::PyErr {

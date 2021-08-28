@@ -54,7 +54,7 @@ impl Call {
     fn arguments(&self) -> Option<Vec<ir::Expression>> {
         self.call.arguments().map(|arguments| {
             arguments
-                .into_iter()
+                .iter()
                 .map(|argument| argument.clone().into())
                 .collect()
         })
@@ -63,7 +63,7 @@ impl Call {
     fn variables_written(&self) -> Option<Vec<ir::Variable>> {
         self.call
             .variables_written()
-            .map(|vr| vr.into_iter().map(|v| v.clone().into()).collect())
+            .map(|vr| vr.iter().map(|v| v.clone().into()).collect())
     }
 
     fn variables_read(&self) -> Option<Vec<ir::Variable>> {

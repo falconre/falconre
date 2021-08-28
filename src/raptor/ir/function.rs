@@ -27,7 +27,7 @@ impl Function {
 
     fn control_flow_graph(&self) -> ir::ControlFlowGraph {
         ir::ControlFlowGraph {
-            control_flow_graph: self.function.control_flow_graph().clone().into(),
+            control_flow_graph: self.function.control_flow_graph().clone(),
         }
     }
 

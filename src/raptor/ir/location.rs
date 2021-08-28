@@ -42,12 +42,9 @@ impl ProgramLocation {
     #[staticmethod]
     fn from_function(function: &Function) -> PyResult<Option<ProgramLocation>> {
         Ok(
-            match raptor::ir::RefProgramLocation::from_function(&function.function) {
-                Some(result) => Some(ProgramLocation {
+            raptor::ir::RefProgramLocation::from_function(&function.function).map(|result| ProgramLocation {
                     program_location: result.into(),
                 }),
-                None => None,
-            },
         )
     }
 }

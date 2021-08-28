@@ -25,7 +25,7 @@ impl Constants {
 impl From<falcon::analysis::constants::Constants> for Constants {
     fn from(constants: falcon::analysis::constants::Constants) -> Constants {
         Constants {
-            constants: constants,
+            constants,
         }
     }
 }

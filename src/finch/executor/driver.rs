@@ -47,7 +47,7 @@ impl Driver {
         self.driver
             .instruction()
             .map(|instruction| il::Instruction {
-                instruction: instruction,
+                instruction,
             })
     }
 

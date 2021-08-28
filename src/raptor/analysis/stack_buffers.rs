@@ -15,7 +15,7 @@ impl StackBuffers {
             lattice_stack_buffer
                 .value()
                 .map(|stack_buffer| ir::StackVariable {
-                    stack_variable: stack_buffer.stack_variable().clone().into(),
+                    stack_variable: stack_buffer.stack_variable().clone(),
                 })
         })
     }
@@ -24,7 +24,7 @@ impl StackBuffers {
 impl From<raptor::analysis::stack_buffers::StackBuffers> for StackBuffers {
     fn from(stack_buffers: raptor::analysis::stack_buffers::StackBuffers) -> StackBuffers {
         StackBuffers {
-            stack_buffers: stack_buffers,
+            stack_buffers,
         }
     }
 }

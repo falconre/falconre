@@ -10,7 +10,7 @@ fn amd64_standard_load(filename: &str, base_path: Option<String>) -> PyResult<ex
     let driver = map_err(finch::platform::linux::Amd64::standard_load(
         filename, base_path,
     ))?;
-    Ok(executor::Driver { driver: driver })
+    Ok(executor::Driver { driver })
 }
 
 #[pymodule]

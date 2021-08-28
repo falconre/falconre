@@ -23,7 +23,7 @@ impl Block {
     fn instructions(&self) -> Vec<ir::Instruction> {
         self.block
             .instructions()
-            .into_iter()
+            .iter()
             .map(|instruction| instruction.clone().into())
             .collect()
     }

@@ -43,7 +43,7 @@ impl Memory {
     fn sections(&self) -> BTreeMap<u64, Section> {
         self.memory
             .sections()
-            .into_iter()
+            .iter()
             .map(|(u, s)| (*u, s.clone().into()))
             .collect()
     }
@@ -54,7 +54,7 @@ impl Memory {
 
     fn set_memory(&mut self, address: u64, data: Vec<u8>, permissions: &MemoryPermissions) {
         self.memory
-            .set_memory(address, data, permissions.memory_permissions.clone())
+            .set_memory(address, data, permissions.memory_permissions)
     }
 }
 
