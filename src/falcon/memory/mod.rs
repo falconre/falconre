@@ -18,6 +18,7 @@ impl MemoryPermissions {
         Ok(MemoryPermissions { memory_permissions })
     }
 
+    #[getter(bits)]
     fn bits(&self) -> u32 {
         self.memory_permissions.bits()
     }

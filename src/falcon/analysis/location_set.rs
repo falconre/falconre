@@ -24,6 +24,7 @@ impl LocationSet {
         self.location_set.insert(location.program_location.clone())
     }
 
+    #[getter(locations)]
     fn locations(&self) -> Vec<il::ProgramLocation> {
         self.location_set
             .locations()

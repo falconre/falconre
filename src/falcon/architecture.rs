@@ -58,6 +58,7 @@ impl Architecture {
         self.architecture.name()
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         Endian {
             endian: self.architecture.endian(),

@@ -17,18 +17,22 @@ impl Scalar {
         }
     }
 
+    #[getter(name)]
     fn name(&self) -> &str {
         self.scalar.name()
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.scalar.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.scalar))
     }
 
+    #[getter(e)]
     fn e(&self) -> Expression {
         Expression {
             expression: self.scalar.clone().into(),

@@ -10,10 +10,12 @@ pub struct ControlFlowGraph {
 
 #[pymethods]
 impl ControlFlowGraph {
+    #[getter(entry)]
     fn entry(&self) -> Option<usize> {
         self.control_flow_graph.entry()
     }
 
+    #[getter(exit)]
     fn exit(&self) -> Option<usize> {
         self.control_flow_graph.exit()
     }
@@ -25,6 +27,7 @@ impl ControlFlowGraph {
             .ok()
     }
 
+    #[getter(blocks)]
     pub fn blocks(&self) -> Vec<Block> {
         self.control_flow_graph
             .blocks()
@@ -40,6 +43,7 @@ impl ControlFlowGraph {
             .ok()
     }
 
+    #[getter(edges)]
     fn edges(&self) -> Vec<Edge> {
         self.control_flow_graph
             .edges()
@@ -62,6 +66,7 @@ impl ControlFlowGraph {
             .map(|edges| edges.into_iter().map(|e| e.clone().into()).collect())
     }
 
+    #[getter(dot_graph)]
     fn dot_graph(&self) -> String {
         self.control_flow_graph.graph().dot_graph()
     }

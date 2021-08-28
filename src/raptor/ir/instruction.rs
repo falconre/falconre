@@ -10,18 +10,22 @@ pub struct Instruction {
 
 #[pymethods]
 impl Instruction {
+    #[getter(index)]
     fn index(&self) -> usize {
         self.instruction.index()
     }
 
+    #[getter(operation)]
     fn operation(&self) -> ir::Operation {
         self.instruction.operation().clone().into()
     }
 
+    #[getter(address)]
     fn address(&self) -> Option<u64> {
         self.instruction.address()
     }
 
+    #[getter(variables)]
     fn variables(&self) -> Option<Vec<ir::Variable>> {
         self.instruction.variables().map(|variables| {
             variables
@@ -31,6 +35,7 @@ impl Instruction {
         })
     }
 
+    #[getter(variables_read)]
     fn variables_read(&self) -> Option<Vec<ir::Variable>> {
         self.instruction.variables_read().map(|variables| {
             variables
@@ -40,6 +45,7 @@ impl Instruction {
         })
     }
 
+    #[getter(variables_written)]
     fn variables_written(&self) -> Option<Vec<ir::Variable>> {
         self.instruction.variables_written().map(|variables| {
             variables

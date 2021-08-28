@@ -13,20 +13,24 @@ pub struct RValue {
 
 #[pymethods]
 impl RValue {
+    #[getter(value)]
     fn value(&self) -> Option<ir::Constant> {
         self.rvalue.value().map(|constant| constant.clone().into())
     }
 
+    #[getter(reference)]
     fn reference(&self) -> Option<ir::Reference> {
         self.rvalue
             .reference()
             .map(|reference| reference.clone().into())
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.rvalue.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.rvalue))
     }

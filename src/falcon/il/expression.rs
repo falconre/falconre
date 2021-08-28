@@ -10,10 +10,12 @@ pub struct Expression {
 
 #[pymethods]
 impl Expression {
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.expression.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.expression))
     }

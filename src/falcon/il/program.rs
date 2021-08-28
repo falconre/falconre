@@ -16,6 +16,7 @@ impl Program {
             .map(|f| f.clone().into())
     }
 
+    #[getter(functions)]
     fn functions(&self) -> Vec<Function> {
         self.program
             .functions()
@@ -34,6 +35,7 @@ impl Program {
             .map(|f| f.clone().into())
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.program))
     }

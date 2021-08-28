@@ -47,6 +47,7 @@ impl ConstantMemory {
         }
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         self.memory.endian()
     }
@@ -80,6 +81,7 @@ impl ExpressionMemory {
         }
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         self.memory.endian()
     }

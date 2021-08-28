@@ -11,10 +11,12 @@ pub struct Section {
 
 #[pymethods]
 impl Section {
+    #[getter(data)]
     fn data(&self) -> &[u8] {
         self.section.data()
     }
 
+    #[getter(permissions)]
     fn permissions(&self) -> MemoryPermissions {
         self.section.permissions().into()
     }
@@ -40,6 +42,7 @@ impl Memory {
         }
     }
 
+    #[getter(sections)]
     fn sections(&self) -> BTreeMap<u64, Section> {
         self.memory
             .sections()

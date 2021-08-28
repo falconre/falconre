@@ -10,14 +10,17 @@ pub struct Edge {
 
 #[pymethods]
 impl Edge {
+    #[getter(condition)]
     fn condition(&self) -> Option<Expression> {
         self.edge.condition().map(|c| c.clone().into())
     }
 
+    #[getter(head)]
     fn head(&self) -> usize {
         self.edge.head()
     }
 
+    #[getter(tail)]
     fn tail(&self) -> usize {
         self.edge.tail()
     }

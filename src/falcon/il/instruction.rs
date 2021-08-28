@@ -11,22 +11,27 @@ pub struct Instruction {
 
 #[pymethods]
 impl Instruction {
+    #[getter(operation)]
     fn operation(&self) -> Operation {
         self.instruction.operation().clone().into()
     }
 
+    #[getter(instruction)]
     fn index(&self) -> usize {
         self.instruction.index()
     }
 
+    #[getter(comment)]
     fn comment(&self) -> Option<String> {
         self.instruction.comment().map(|s| s.to_string())
     }
 
+    #[getter(address)]
     fn address(&self) -> Option<u64> {
         self.instruction.address()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.instruction))
     }

@@ -11,14 +11,17 @@ pub struct Block {
 
 #[pymethods]
 impl Block {
+    #[getter(address)]
     fn address(&self) -> Option<u64> {
         self.block.address()
     }
 
+    #[getter(index)]
     fn index(&self) -> usize {
         self.block.index()
     }
 
+    #[getter(instructions)]
     fn instructions(&self) -> Vec<Instruction> {
         self.block
             .instructions()
@@ -27,6 +30,7 @@ impl Block {
             .collect::<Vec<Instruction>>()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.block))
     }

@@ -18,20 +18,24 @@ impl Constant {
         }
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.constant.bits()
     }
 
+    #[getter(value_u64)]
     fn value_u64(&self) -> Option<u64> {
         self.constant.value_u64()
     }
 
+    #[getter(e)]
     fn e(&self) -> Expression {
         Expression {
             expression: self.constant.clone().into(),
         }
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.constant))
     }

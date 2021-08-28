@@ -14,28 +14,29 @@ pub struct Variable {
 
 #[pymethods]
 impl Variable {
+    #[getter(scalar)]
     fn scalar(&self) -> Option<ir::Scalar> {
         self.variable.scalar().map(|scalar| scalar.clone().into())
     }
 
+    #[getter(stack_variable)]
     fn stack_variable(&self) -> Option<ir::StackVariable> {
         self.variable
             .stack_variable()
             .map(|stack_variable| stack_variable.clone().into())
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.variable.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.variable))
     }
 
-    fn debug(&self) -> String {
-        format!("{:?}", self.variable)
-    }
-
+    #[getter(e)]
     fn e(&self) -> ir::Expression {
         ir::Expression {
             expression: self.variable.clone().into(),

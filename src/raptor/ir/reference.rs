@@ -12,10 +12,12 @@ pub struct Reference {
 
 #[pymethods]
 impl Reference {
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.reference.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.reference))
     }

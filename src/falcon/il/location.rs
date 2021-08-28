@@ -22,6 +22,7 @@ impl ProgramLocation {
         }
     }
 
+    #[getter(function_location)]
     fn function_location(&self) -> FunctionLocation {
         FunctionLocation {
             function_location: self.program_location.function_location().clone(),
@@ -74,10 +75,12 @@ pub struct FunctionLocation {
 
 #[pymethods]
 impl FunctionLocation {
+    #[getter(block_index)]
     fn block_index(&self) -> Option<usize> {
         self.function_location.block_index()
     }
 
+    #[getter(instruction_index)]
     fn instruction_index(&self) -> Option<usize> {
         self.function_location.instruction_index()
     }

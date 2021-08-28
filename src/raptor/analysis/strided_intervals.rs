@@ -37,10 +37,12 @@ impl From<raptor::analysis::strided_intervals::State> for StridedIntervals {
 
 #[pymethods]
 impl StridedInterval {
+    #[getter(stride)]
     fn stride(&self) -> usize {
         self.strided_interval.stride()
     }
 
+    #[getter(lo)]
     fn lo(&self) -> Option<ir::Constant> {
         self.strided_interval
             .interval()
@@ -49,6 +51,7 @@ impl StridedInterval {
             .map(|constant| constant.clone().into())
     }
 
+    #[getter(hi)]
     fn hi(&self) -> Option<ir::Constant> {
         self.strided_interval
             .interval()

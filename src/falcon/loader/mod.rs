@@ -12,10 +12,12 @@ pub struct FunctionEntry {
 
 #[pymethods]
 impl FunctionEntry {
+    #[getter(address)]
     fn address(&self) -> u64 {
         self.function_entry.address()
     }
 
+    #[getter(name)]
     fn name(&self) -> Option<String> {
         self.function_entry.name().map(|s| s.to_string())
     }
@@ -45,10 +47,12 @@ pub struct Symbol {
 
 #[pymethods]
 impl Symbol {
+    #[getter(name)]
     fn name(&self) -> &str {
         self.symbol.name()
     }
 
+    #[getter(address)]
     fn address(&self) -> u64 {
         self.symbol.address()
     }
@@ -78,12 +82,17 @@ impl ManualEdge {
         }
     }
 
+    #[getter(head_address)]
     fn head_address(&self) -> u64 {
         self.manual_edge.head_address()
     }
+
+    #[getter(tail_address)]
     fn tail_address(&self) -> u64 {
         self.manual_edge.tail_address()
     }
+
+    #[getter(condition)]
     fn condition(&self) -> Option<il::Expression> {
         self.manual_edge
             .condition()
@@ -116,11 +125,17 @@ impl Options {
             .set_unsupported_are_intrinsics(unsupported_are_intrinsics);
     }
 
+    #[getter(unsupported_are_intrinsics)]
+    fn unsupported_are_intrinsics(&self) -> bool {
+        self.options.unsupported_are_intrinsics()
+    }
+
     fn add_manual_edge(&mut self, manual_edge: &ManualEdge) {
         self.options
             .add_manual_edge(manual_edge.manual_edge.clone());
     }
 
+    #[getter(manual_edges)]
     fn manual_edges(&self) -> Vec<ManualEdge> {
         self.options
             .manual_edges()
@@ -223,22 +238,27 @@ impl Elf {
         self.elf.add_user_function(address);
     }
 
+    #[getter(dt_needed)]
     fn dt_needed(&self) -> Option<Vec<String>> {
         self.elf.dt_needed().ok()
     }
 
+    #[getter(architecture)]
     fn architecture(&self) -> Architecture {
         self.elf.falconre_architecture()
     }
 
+    #[getter(memory)]
     fn memory(&self) -> PyResult<crate::falcon::memory::backing::Memory> {
         self.elf.falconre_memory()
     }
 
+    #[getter(program_entry)]
     fn program_entry(&self) -> u64 {
         self.elf.falconre_program_entry()
     }
 
+    #[getter(symbols)]
     fn symbols(&self) -> Vec<Symbol> {
         self.elf.falconre_symbols()
     }
@@ -293,18 +313,22 @@ impl Pe {
         Ok(Pe { pe })
     }
 
+    #[getter(architecture)]
     fn architecture(&self) -> Architecture {
         self.pe.falconre_architecture()
     }
 
+    #[getter(memory)]
     fn memory(&self) -> PyResult<crate::falcon::memory::backing::Memory> {
         self.pe.falconre_memory()
     }
 
+    #[getter(program_entry)]
     fn program_entry(&self) -> u64 {
         self.pe.falconre_program_entry()
     }
 
+    #[getter(symbols)]
     fn symbols(&self) -> Vec<Symbol> {
         self.pe.falconre_symbols()
     }
