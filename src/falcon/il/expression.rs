@@ -3,6 +3,7 @@ use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
+#[derive(Clone)]
 pub struct Expression {
     pub(crate) expression: falcon::il::Expression,
 }

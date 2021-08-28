@@ -84,7 +84,8 @@ fn translate_program_parallel(
     Ok(ir::Program { program: program })
 }
 
-#[pymodule(ir)]
+#[pymodule]
+#[pyo3(name = "ir")]
 fn raptor_ir_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<ir::Block>()?;
     m.add_class::<ir::Constant>()?;
@@ -107,7 +108,8 @@ fn raptor_ir_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(raptor)]
+#[pymodule]
+#[pyo3(name = "raptor")]
 pub fn raptor_module(py: Python, m: &PyModule) -> PyResult<()> {
     use analysis::PyInit_raptor_analysis;
 

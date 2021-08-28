@@ -52,7 +52,8 @@ pub fn constants(function: &il::Function) -> PyResult<HashMap<il::ProgramLocatio
     })
 }
 
-#[pymodule(analysis)]
+#[pymodule]
+#[pyo3(name = "analysis")]
 fn falcon_analysis_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<Constants>()?;
     m.add_class::<LocationSet>()?;

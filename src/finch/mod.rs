@@ -13,7 +13,8 @@ fn amd64_standard_load(filename: &str, base_path: Option<String>) -> PyResult<ex
     Ok(executor::Driver { driver: driver })
 }
 
-#[pymodule(executor)]
+#[pymodule]
+#[pyo3(name = "executor")]
 fn finch_executor_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<executor::Driver>()?;
     m.add_class::<executor::Memory>()?;
@@ -22,7 +23,8 @@ fn finch_executor_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(finch)]
+#[pymodule]
+#[pyo3(name = "finch")]
 pub fn finch_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pymodule!(executor))?;
     m.add_wrapped(wrap_pyfunction!(amd64_standard_load))?;

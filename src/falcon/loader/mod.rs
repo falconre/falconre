@@ -60,12 +60,79 @@ impl From<falcon::loader::Symbol> for Symbol {
     }
 }
 
+#[pyclass]
+pub struct ManualEdge {
+    pub(crate) manual_edge: falcon::translator::ManualEdge,
+}
+
+#[pymethods]
+impl ManualEdge {
+    #[new]
+    fn new(head_address: u64, tail_address: u64, condition: Option<il::Expression>) -> ManualEdge {
+        ManualEdge {
+            manual_edge: falcon::translator::ManualEdge::new(
+                head_address,
+                tail_address,
+                condition.map(|e| e.expression),
+            ),
+        }
+    }
+
+    fn head_address(&self) -> u64 {
+        self.manual_edge.head_address()
+    }
+    fn tail_address(&self) -> u64 {
+        self.manual_edge.tail_address()
+    }
+    fn condition(&self) -> Option<il::Expression> {
+        self.manual_edge
+            .condition()
+            .map(|e| il::Expression::from(e.clone()))
+    }
+}
+
+impl From<falcon::translator::ManualEdge> for ManualEdge {
+    fn from(manual_edge: falcon::translator::ManualEdge) -> ManualEdge {
+        ManualEdge { manual_edge }
+    }
+}
+
+#[pyclass]
+pub struct Options {
+    pub(crate) options: falcon::translator::Options,
+}
+
+#[pymethods]
+impl Options {
+    #[new]
+    fn new() -> Options {
+        Options {
+            options: falcon::translator::Options::new(),
+        }
+    }
+
+    fn set_unsupported_are_intrinsics(&mut self, unsupported_are_intrinsics: bool) {
+        self.options
+            .set_unsupported_are_intrinsics(unsupported_are_intrinsics);
+    }
+
+    fn add_manual_edge(&mut self, manual_edge: &ManualEdge) {
+        self.options
+            .add_manual_edge(manual_edge.manual_edge.clone());
+    }
+
+    fn manual_edges(&self) -> Vec<ManualEdge> {
+        self.options
+            .manual_edges()
+            .into_iter()
+            .map(|m| m.clone().into())
+            .collect()
+    }
+}
+
 trait FalconreLoader: falcon::loader::Loader {
     fn falconre_memory(&self) -> PyResult<crate::falcon::memory::backing::Memory> {
-        Ok(self
-            .memory()
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?
-            .into())
+        Ok(map_err(self.memory())?.into())
     }
 
     fn falconre_architecture(&self) -> Architecture {
@@ -90,16 +157,24 @@ trait FalconreLoader: falcon::loader::Loader {
         map_err(self.program().map(|program| program.into()))
     }
 
-    fn falconre_program_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        map_err(self.program_verbose().map(|(program, errors)| {
-            (
-                program.into(),
-                errors
-                    .into_iter()
-                    .map(|(function_entry, error)| (function_entry.into(), error.to_string()))
-                    .collect(),
-            )
-        }))
+    fn falconre_program_verbose(
+        &self,
+        options: &Options,
+    ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
+        map_err(
+            self.program_verbose(&options.options)
+                .map(|(program, errors)| {
+                    (
+                        program.into(),
+                        errors
+                            .into_iter()
+                            .map(|(function_entry, error)| {
+                                (function_entry.into(), error.to_string())
+                            })
+                            .collect(),
+                    )
+                }),
+        )
     }
 
     fn falconre_program_recursive(&self) -> PyResult<il::Program> {
@@ -108,16 +183,22 @@ trait FalconreLoader: falcon::loader::Loader {
 
     fn falconre_program_recursive_verbose(
         &self,
+        options: &Options,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        map_err(self.program_recursive_verbose().map(|(program, errors)| {
-            (
-                program.into(),
-                errors
-                    .into_iter()
-                    .map(|(function_entry, error)| (function_entry.into(), error.to_string()))
-                    .collect(),
-            )
-        }))
+        map_err(
+            self.program_recursive_verbose(&options.options)
+                .map(|(program, errors)| {
+                    (
+                        program.into(),
+                        errors
+                            .into_iter()
+                            .map(|(function_entry, error)| {
+                                (function_entry.into(), error.to_string())
+                            })
+                            .collect(),
+                    )
+                }),
+        )
     }
 }
 
@@ -170,16 +251,22 @@ impl Elf {
         self.elf.falconre_program()
     }
 
-    fn program_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.elf.falconre_program_verbose()
+    fn program_verbose(
+        &self,
+        options: &Options,
+    ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
+        self.elf.falconre_program_verbose(&options)
     }
 
     fn program_recursive(&self) -> PyResult<il::Program> {
         self.elf.falconre_program_recursive()
     }
 
-    fn program_recursive_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.elf.falconre_program_recursive_verbose()
+    fn program_recursive_verbose(
+        &self,
+        options: &Options,
+    ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
+        self.elf.falconre_program_recursive_verbose(&options)
     }
 }
 
@@ -230,16 +317,22 @@ impl Pe {
         self.pe.falconre_program()
     }
 
-    fn program_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.pe.falconre_program_verbose()
+    fn program_verbose(
+        &self,
+        options: &Options,
+    ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
+        self.pe.falconre_program_verbose(&options)
     }
 
     fn program_recursive(&self) -> PyResult<il::Program> {
         self.pe.falconre_program_recursive()
     }
 
-    fn program_recursive_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        self.pe.falconre_program_recursive_verbose()
+    fn program_recursive_verbose(
+        &self,
+        options: &Options,
+    ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
+        self.pe.falconre_program_recursive_verbose(&options)
     }
 }
 

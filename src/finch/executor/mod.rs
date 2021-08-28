@@ -8,7 +8,7 @@ pub use driver::Driver;
 pub use memory::Memory;
 pub use state::State;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct Successor {
     successor: finch::executor::Successor,
 }

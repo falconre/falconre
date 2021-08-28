@@ -6,10 +6,15 @@ pub mod finch;
 pub mod raptor;
 
 pub fn map_err<V, E: std::error::Error>(r: Result<V, E>) -> PyResult<V> {
-    Ok(r.map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+    Ok(r.map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))?)
 }
 
-#[pymodule(falconre)]
+pub fn str_err<S: Into<String>>(s: S) -> pyo3::PyErr {
+    pyo3::exceptions::PyException::new_err(s.into())
+}
+
+#[pymodule]
+#[pyo3(name = "falconre")]
 fn falconre(_py: Python, m: &PyModule) -> PyResult<()> {
     use crate::falcon::PyInit_falcon;
     use crate::finch::PyInit_finch;

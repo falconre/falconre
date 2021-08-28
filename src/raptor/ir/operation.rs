@@ -18,7 +18,7 @@ impl Operation {
             raptor::ir::Operation::Call(_) => "call",
             raptor::ir::Operation::Intrinsic(_) => "intrinsic",
             raptor::ir::Operation::Return(_) => "return",
-            raptor::ir::Operation::Nop => "nop",
+            raptor::ir::Operation::Nop(_) => "nop",
         }
     }
 

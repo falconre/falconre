@@ -1,3 +1,4 @@
+use crate::map_err;
 use pyo3::prelude::*;
 
 use super::MemoryPermissions;
@@ -24,17 +25,11 @@ impl<V: falcon::memory::Value> Memory<V> {
     }
 
     fn store(&mut self, address: u64, value: V) -> PyResult<()> {
-        Ok(self
-            .memory
-            .store(address, value)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+        Ok(map_err(self.memory.store(address, value))?)
     }
 
     fn load(&self, address: u64, bits: usize) -> PyResult<Option<V>> {
-        Ok(self
-            .memory
-            .load(address, bits)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+        Ok(map_err(self.memory.load(address, bits))?)
     }
 }
 

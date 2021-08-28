@@ -7,14 +7,16 @@ pub mod memory;
 use pyo3::prelude::*;
 use pyo3::wrap_pymodule;
 
-#[pymodule(architecture)]
+#[pymodule]
+#[pyo3(name = "architecture")]
 fn falcon_architecture_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<architecture::Endian>()?;
     m.add_class::<architecture::Architecture>()?;
     Ok(())
 }
 
-#[pymodule(il)]
+#[pymodule]
+#[pyo3(name = "il")]
 fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<il::Block>()?;
     m.add_class::<il::Constant>()?;
@@ -31,7 +33,8 @@ fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(loader)]
+#[pymodule]
+#[pyo3(name = "loader")]
 fn falcon_loader_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<loader::Elf>()?;
     m.add_class::<loader::FunctionEntry>()?;
@@ -40,7 +43,8 @@ fn falcon_loader_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(memory)]
+#[pymodule]
+#[pyo3(name = "memory")]
 fn falcon_memory_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<memory::backing::Section>()?;
     m.add_class::<memory::backing::Memory>()?;
@@ -49,7 +53,8 @@ fn falcon_memory_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(falcon)]
+#[pymodule]
+#[pyo3(name = "falcon")]
 pub fn falcon_module(_py: Python, m: &PyModule) -> PyResult<()> {
     use crate::falcon::analysis::PyInit_analysis;
 

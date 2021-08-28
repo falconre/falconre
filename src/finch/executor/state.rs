@@ -3,7 +3,7 @@ use crate::falcon::il;
 use crate::map_err;
 use pyo3::prelude::*;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct State {
     pub(crate) state: finch::executor::State,
 }

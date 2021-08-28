@@ -1,3 +1,4 @@
+use crate::str_err;
 use pyo3::prelude::*;
 
 pub mod backing;
@@ -12,9 +13,8 @@ pub struct MemoryPermissions {
 impl MemoryPermissions {
     #[new]
     fn new(bits: u32) -> PyResult<MemoryPermissions> {
-        let memory_permissions = falcon::memory::MemoryPermissions::from_bits(bits).ok_or(
-            pyo3::exceptions::Exception::py_err("Invalid bits for MemoryPermissions"),
-        )?;
+        let memory_permissions = falcon::memory::MemoryPermissions::from_bits(bits)
+            .ok_or(str_err("Invalid bits for MemoryPermissions"))?;
         Ok(MemoryPermissions {
             memory_permissions: memory_permissions,
         })
