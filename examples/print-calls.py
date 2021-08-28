@@ -14,6 +14,8 @@ elf = falconre.falcon.loader.Elf(sys.argv[1])
 program = elf.program_recursive()
 program = falconre.raptor.translate_program_parallel(elf, program)
 
+print("Lifted")
+
 for function in program.functions():
     log.blue("{:X}: {}".format(function.address(), function.name()))
     print_calls(function)
