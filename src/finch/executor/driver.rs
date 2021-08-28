@@ -46,9 +46,7 @@ impl Driver {
     fn instruction(&self) -> Option<il::Instruction> {
         self.driver
             .instruction()
-            .map(|instruction| il::Instruction {
-                instruction,
-            })
+            .map(|instruction| il::Instruction { instruction })
     }
 
     fn state(&self) -> State {

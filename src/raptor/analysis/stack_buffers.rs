@@ -23,8 +23,6 @@ impl StackBuffers {
 
 impl From<raptor::analysis::stack_buffers::StackBuffers> for StackBuffers {
     fn from(stack_buffers: raptor::analysis::stack_buffers::StackBuffers) -> StackBuffers {
-        StackBuffers {
-            stack_buffers,
-        }
+        StackBuffers { stack_buffers }
     }
 }

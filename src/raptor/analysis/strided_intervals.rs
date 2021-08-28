@@ -73,8 +73,6 @@ impl From<raptor::analysis::strided_intervals::StridedInterval> for StridedInter
     fn from(
         strided_interval: raptor::analysis::strided_intervals::StridedInterval,
     ) -> StridedInterval {
-        StridedInterval {
-            strided_interval,
-        }
+        StridedInterval { strided_interval }
     }
 }

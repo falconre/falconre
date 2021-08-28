@@ -15,9 +15,7 @@ impl MemoryPermissions {
     fn new(bits: u32) -> PyResult<MemoryPermissions> {
         let memory_permissions = falcon::memory::MemoryPermissions::from_bits(bits)
             .ok_or_else(|| str_err("Invalid bits for MemoryPermissions"))?;
-        Ok(MemoryPermissions {
-            memory_permissions,
-        })
+        Ok(MemoryPermissions { memory_permissions })
     }
 
     fn bits(&self) -> u32 {

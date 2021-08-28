@@ -22,17 +22,17 @@ jobs:
             components: clippy
             override: true
       - run: rustup component add rustfmt
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
       - name: cargo fmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
-      # - name: cargo clippy
-      #   uses: actions-rs/cargo@v1
-      #   with:
-      #     command: clippy
-      #     args: -- -D warnings
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings

@@ -48,20 +48,14 @@ fn translate_program_parallel(
             .functions()
             .par_iter()
             .map(|function| function_translator.translate_function(function))
-            .try_fold(
-                Vec::new,
-                |mut functions, function| {
-                    functions.push(function?);
-                    Ok(functions)
-                },
-            )
-            .try_reduce(
-                Vec::new,
-                |mut l, mut r| {
-                    l.append(&mut r);
-                    Ok(l)
-                },
-            );
+            .try_fold(Vec::new, |mut functions, function| {
+                functions.push(function?);
+                Ok(functions)
+            })
+            .try_reduce(Vec::new, |mut l, mut r| {
+                l.append(&mut r);
+                Ok(l)
+            });
         map_err(functions)
     }
 

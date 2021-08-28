@@ -35,8 +35,6 @@ impl LocationSet {
 
 impl From<falcon::analysis::LocationSet> for LocationSet {
     fn from(location_set: falcon::analysis::LocationSet) -> LocationSet {
-        LocationSet {
-            location_set,
-        }
+        LocationSet { location_set }
     }
 }

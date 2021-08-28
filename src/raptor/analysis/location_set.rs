@@ -35,8 +35,6 @@ impl LocationSet {
 
 impl From<raptor::analysis::LocationSet> for LocationSet {
     fn from(location_set: raptor::analysis::LocationSet) -> LocationSet {
-        LocationSet {
-            location_set,
-        }
+        LocationSet { location_set }
     }
 }
