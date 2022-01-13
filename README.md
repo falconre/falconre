@@ -88,14 +88,7 @@ Install rust:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-You'll need this thing called "Rust nightly":
-
-```
-rustup toolchain install nightly
-rustup default nightly
-```
-
-Get the dependencies
+Get the dependencies. _Note: You must have capstone 4.0.2 to use falcon._
 
 ```
 brew install z3 capstone

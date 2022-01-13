@@ -75,9 +75,9 @@ dependencies = [
 
 [[package]]
 name = "bad64"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5352295386f01551b3802dbb8e6f7227770340092070e302133b93dd58991d0e"
+checksum = "81372b7497c2b116352fe9463bb6380c8125c25bd810014871eccd097f5da779"
 dependencies = [
  "bad64-sys",
  "cstr_core",
@@ -88,9 +88,9 @@ dependencies = [
 
 [[package]]
 name = "bad64-sys"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d4b87f097c8622246494597ccdf357a8c74bf009b3deb652580590a114a6c37"
+checksum = "059c5068b0f0f2a342b16ede3507c6cc5dd9be1e025ad5aa171840397fbd848f"
 dependencies = [
  "bindgen 0.59.1",
  "cc",
@@ -384,9 +384,9 @@ dependencies = [
 
 [[package]]
 name = "falcon"
-version = "0.5.2"
+version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1613c8042d02d7b730e016ca2a16d48666311dbcf578bff4faf1e6664d7ecd94"
+checksum = "d8f07fefdd32ecdf4b65eb738ccc6cf53dac6abdc9e1738128ddca10369fabbf"
 dependencies = [
  "bad64",
  "base64",
@@ -427,21 +427,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "falcon-raptor"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10c80fbb6e3ed87410215b77dedbc97bff1177c1b717aa1bb457cca4ee049156"
-dependencies = [
- "error-chain",
- "falcon",
- "falcon-z3",
- "goblin",
- "lazy_static",
- "log",
- "serde",
-]
-
-[[package]]
 name = "falcon-z3"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -456,9 +441,9 @@ dependencies = [
 
 [[package]]
 name = "falcon_capstone"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63eb2923d04810575c35e6d0b754e716ca1d3db575aeb16d0778d7e40975578b"
+checksum = "b505d11b48939ff7ccf3f199ed6940b8d59797dc0523972f4a7007c8ac7d0105"
 dependencies = [
  "bindgen 0.59.1",
  "libc",
@@ -471,7 +456,6 @@ version = "0.5.2"
 dependencies = [
  "falcon",
  "falcon-finch",
- "falcon-raptor",
  "pyo3",
  "rayon",
  "serde_json",
@@ -1067,9 +1051,6 @@ name = "serde"
 version = "1.0.127"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f03b9878abf6d14e6779d3f24f07b2cfa90352cfec4acc5aab8f1ac7f146fae8"
-dependencies = [
- "serde_derive",
-]
 
 [[package]]
 name = "serde_derive"

@@ -49,6 +49,7 @@ fn falcon_memory_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<memory::backing::Section>()?;
     m.add_class::<memory::backing::Memory>()?;
     m.add_class::<memory::paged::ConstantMemory>()?;
+    m.add_class::<memory::MemoryPermissions>()?;
     m.add_class::<memory::paged::ExpressionMemory>()?;
     Ok(())
 }

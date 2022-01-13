@@ -3,6 +3,9 @@ import falconre
 import sys
 import time
 
+print("Obsolete until raptor comes back")
+sys.exit(1)
+
 
 
 def filter_stack_variables(variables):
