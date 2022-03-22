@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::{Function, Program};
@@ -49,10 +48,7 @@ impl ProgramLocation {
             },
         )
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for ProgramLocation {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.program_location.to_string())
     }
@@ -84,10 +80,7 @@ impl FunctionLocation {
     fn instruction_index(&self) -> Option<usize> {
         self.function_location.instruction_index()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for FunctionLocation {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.function_location.to_string())
     }

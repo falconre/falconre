@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use crate::falcon::architecture::Architecture;
@@ -21,22 +20,19 @@ impl FunctionEntry {
     fn name(&self) -> Option<String> {
         self.function_entry.name().map(|s| s.to_string())
     }
-}
 
-impl From<falcon::loader::FunctionEntry> for FunctionEntry {
-    fn from(function_entry: falcon::loader::FunctionEntry) -> FunctionEntry {
-        FunctionEntry { function_entry }
-    }
-}
-
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for FunctionEntry {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.function_entry.to_string())
     }
 
     fn __repr__(&self) -> PyResult<String> {
         Ok(self.function_entry.to_string())
+    }
+}
+
+impl From<falcon::loader::FunctionEntry> for FunctionEntry {
+    fn from(function_entry: falcon::loader::FunctionEntry) -> FunctionEntry {
+        FunctionEntry { function_entry }
     }
 }
 

@@ -5,19 +5,17 @@ pub mod loader;
 pub mod memory;
 
 use pyo3::prelude::*;
-use pyo3::wrap_pymodule;
 
-#[pymodule]
-#[pyo3(name = "architecture")]
-fn falcon_architecture_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_architecture_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "architecture")?;
     m.add_class::<architecture::Endian>()?;
     m.add_class::<architecture::Architecture>()?;
+    parent_module.add_submodule(m)?;
     Ok(())
 }
 
-#[pymodule]
-#[pyo3(name = "il")]
-fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_il_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "il")?;
     m.add_class::<il::Block>()?;
     m.add_class::<il::Constant>()?;
     m.add_class::<il::ControlFlowGraph>()?;
@@ -30,39 +28,43 @@ fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<il::Program>()?;
     m.add_class::<il::ProgramLocation>()?;
     m.add_class::<il::Scalar>()?;
+    parent_module.add_submodule(m)?;
     Ok(())
 }
 
-#[pymodule]
-#[pyo3(name = "loader")]
-fn falcon_loader_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_loader_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "loader")?;
     m.add_class::<loader::Elf>()?;
     m.add_class::<loader::FunctionEntry>()?;
     m.add_class::<loader::Symbol>()?;
     m.add_class::<loader::Pe>()?;
+    parent_module.add_submodule(m)?;
     Ok(())
 }
 
-#[pymodule]
-#[pyo3(name = "memory")]
-fn falcon_memory_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_memory_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "memory")?;
     m.add_class::<memory::backing::Section>()?;
     m.add_class::<memory::backing::Memory>()?;
     m.add_class::<memory::paged::ConstantMemory>()?;
     m.add_class::<memory::MemoryPermissions>()?;
     m.add_class::<memory::paged::ExpressionMemory>()?;
+    parent_module.add_submodule(m)?;
     Ok(())
 }
 
 #[pymodule]
 #[pyo3(name = "falcon")]
-pub fn falcon_module(_py: Python, m: &PyModule) -> PyResult<()> {
-    use crate::falcon::analysis::PyInit_analysis;
+pub fn register_falcon_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "falcon")?;
 
-    m.add_wrapped(wrap_pymodule!(analysis))?;
-    m.add_wrapped(wrap_pymodule!(architecture))?;
-    m.add_wrapped(wrap_pymodule!(il))?;
-    m.add_wrapped(wrap_pymodule!(loader))?;
-    m.add_wrapped(wrap_pymodule!(memory))?;
+    register_architecture_module(py, m)?;
+    register_il_module(py, m)?;
+    register_loader_module(py, m)?;
+    register_memory_module(py, m)?;
+    analysis::register_analysis_module(py, m)?;
+
+    parent_module.add_submodule(m)?;
+
     Ok(())
 }

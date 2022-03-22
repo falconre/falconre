@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -29,10 +28,7 @@ impl Endian {
             falcon::architecture::Endian::Big => "big",
         }
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Endian {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.str().to_string())
     }

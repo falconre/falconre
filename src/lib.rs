@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use pyo3::wrap_pymodule;
 
 pub mod falcon;
 pub mod finch;
@@ -15,13 +14,9 @@ pub fn str_err<S: Into<String>>(s: S) -> pyo3::PyErr {
 
 #[pymodule]
 #[pyo3(name = "falconre")]
-fn falconre(_py: Python, m: &PyModule) -> PyResult<()> {
-    use crate::falcon::PyInit_falcon;
-    use crate::finch::PyInit_finch;
-    // use crate::raptor::PyInit_raptor;
+fn falconre(py: Python, m: &PyModule) -> PyResult<()> {
+    falcon::register_falcon_module(py, m)?;
+    finch::register_finch_module(py, m)?;
 
-    m.add_wrapped(wrap_pymodule!(falcon))?;
-    m.add_wrapped(wrap_pymodule!(finch))?;
-    // m.add_wrapped(wrap_pymodule!(raptor))?;
     Ok(())
 }

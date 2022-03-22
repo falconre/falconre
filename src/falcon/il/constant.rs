@@ -1,6 +1,5 @@
 use super::Expression;
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -39,10 +38,7 @@ impl Constant {
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.constant))
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Constant {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.constant.to_string())
     }

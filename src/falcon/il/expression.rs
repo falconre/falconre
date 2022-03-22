@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -200,10 +199,7 @@ impl Expression {
             ))?,
         })
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Expression {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.expression.to_string())
     }
