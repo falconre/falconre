@@ -8,13 +8,14 @@ pub use driver::Driver;
 pub use memory::Memory;
 pub use state::State;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct Successor {
     successor: finch::executor::Successor,
 }
 
 #[pymethods]
 impl Successor {
+    #[getter(type)]
     fn type_(&self) -> String {
         match self.successor.type_() {
             finch::executor::SuccessorType::FallThrough => "FallThrough",
@@ -24,6 +25,7 @@ impl Successor {
         .to_string()
     }
 
+    #[getter(branch_target)]
     fn branch_target(&self) -> Option<u64> {
         match self.successor.type_() {
             finch::executor::SuccessorType::Branch(target) => Some(*target),
@@ -31,6 +33,7 @@ impl Successor {
         }
     }
 
+    #[getter(state)]
     fn state(&self) -> State {
         State {
             state: self.successor.state().clone(),

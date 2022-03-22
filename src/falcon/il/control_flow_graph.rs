@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::{Block, Edge};
@@ -10,10 +9,12 @@ pub struct ControlFlowGraph {
 
 #[pymethods]
 impl ControlFlowGraph {
+    #[getter(entry)]
     fn entry(&self) -> Option<usize> {
         self.control_flow_graph.entry()
     }
 
+    #[getter(exit)]
     fn exit(&self) -> Option<usize> {
         self.control_flow_graph.exit()
     }
@@ -25,6 +26,7 @@ impl ControlFlowGraph {
             .ok()
     }
 
+    #[getter(blocks)]
     pub fn blocks(&self) -> Vec<Block> {
         self.control_flow_graph
             .blocks()
@@ -40,6 +42,7 @@ impl ControlFlowGraph {
             .ok()
     }
 
+    #[getter(edges)]
     fn edges(&self) -> Vec<Edge> {
         self.control_flow_graph
             .edges()
@@ -62,13 +65,11 @@ impl ControlFlowGraph {
             .map(|edges| edges.into_iter().map(|e| e.clone().into()).collect())
     }
 
+    #[getter(dot_graph)]
     fn dot_graph(&self) -> String {
         self.control_flow_graph.graph().dot_graph()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for ControlFlowGraph {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.control_flow_graph.to_string())
     }

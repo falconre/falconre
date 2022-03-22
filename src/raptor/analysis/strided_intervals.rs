@@ -31,16 +31,18 @@ pub struct StridedInterval {
 
 impl From<raptor::analysis::strided_intervals::State> for StridedIntervals {
     fn from(state: raptor::analysis::strided_intervals::State) -> StridedIntervals {
-        StridedIntervals { state: state }
+        StridedIntervals { state }
     }
 }
 
 #[pymethods]
 impl StridedInterval {
+    #[getter(stride)]
     fn stride(&self) -> usize {
         self.strided_interval.stride()
     }
 
+    #[getter(lo)]
     fn lo(&self) -> Option<ir::Constant> {
         self.strided_interval
             .interval()
@@ -49,6 +51,7 @@ impl StridedInterval {
             .map(|constant| constant.clone().into())
     }
 
+    #[getter(hi)]
     fn hi(&self) -> Option<ir::Constant> {
         self.strided_interval
             .interval()
@@ -73,8 +76,6 @@ impl From<raptor::analysis::strided_intervals::StridedInterval> for StridedInter
     fn from(
         strided_interval: raptor::analysis::strided_intervals::StridedInterval,
     ) -> StridedInterval {
-        StridedInterval {
-            strided_interval: strided_interval,
-        }
+        StridedInterval { strided_interval }
     }
 }

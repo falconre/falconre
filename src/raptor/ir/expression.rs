@@ -11,14 +11,17 @@ pub struct Expression {
 
 #[pymethods]
 impl Expression {
+    #[getter(contains_reference)]
     fn contains_reference(&self) -> bool {
         self.expression.contains_reference()
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.expression.bits()
     }
 
+    #[getter(variables)]
     fn variables(&self) -> Vec<ir::Variable> {
         self.expression
             .variables()
@@ -27,18 +30,21 @@ impl Expression {
             .collect()
     }
 
+    #[getter(variable)]
     fn variable(&self) -> Option<ir::Variable> {
         self.expression
             .variable()
             .map(|variable| variable.clone().into())
     }
 
+    #[getter(stack_pointer)]
     fn stack_pointer(&self) -> Option<ir::StackVariable> {
         self.expression
             .stack_pointer()
             .map(|stack_variable| stack_variable.clone().into())
     }
 
+    #[getter(lhs)]
     fn lhs(&self) -> Option<Expression> {
         match &self.expression {
             raptor::ir::Expression::Add(lhs, _)
@@ -57,7 +63,7 @@ impl Expression {
             | raptor::ir::Expression::Cmpneq(lhs, _)
             | raptor::ir::Expression::Cmpltu(lhs, _)
             | raptor::ir::Expression::Cmplts(lhs, _) => Some(Expression {
-                expression: lhs.as_ref().clone().into(),
+                expression: lhs.as_ref().clone(),
             }),
             raptor::ir::Expression::LValue(_)
             | raptor::ir::Expression::RValue(_)
@@ -68,6 +74,7 @@ impl Expression {
         }
     }
 
+    #[getter(rhs)]
     fn rhs(&self) -> Option<Expression> {
         match &self.expression {
             raptor::ir::Expression::Add(_, rhs)
@@ -86,7 +93,7 @@ impl Expression {
             | raptor::ir::Expression::Cmpneq(_, rhs)
             | raptor::ir::Expression::Cmpltu(_, rhs)
             | raptor::ir::Expression::Cmplts(_, rhs) => Some(Expression {
-                expression: rhs.as_ref().clone().into(),
+                expression: rhs.as_ref().clone(),
             }),
             raptor::ir::Expression::LValue(_)
             | raptor::ir::Expression::RValue(_)
@@ -97,6 +104,7 @@ impl Expression {
         }
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.expression))
     }

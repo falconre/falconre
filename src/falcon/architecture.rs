@@ -1,4 +1,4 @@
-use pyo3::class::PyObjectProtocol;
+use crate::map_err;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -28,10 +28,7 @@ impl Endian {
             falcon::architecture::Endian::Big => "big",
         }
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Endian {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.str().to_string())
     }
@@ -58,6 +55,7 @@ impl Architecture {
         self.architecture.name()
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         Endian {
             endian: self.architecture.endian(),
@@ -90,5 +88,19 @@ impl Architecture {
         Architecture {
             architecture: Box::new(falcon::architecture::X86::new()),
         }
+    }
+
+    fn translate_function(
+        &self,
+        memory: &crate::falcon::memory::backing::Memory,
+        address: u64,
+    ) -> PyResult<crate::falcon::il::Function> {
+        Ok(crate::falcon::il::Function {
+            function: map_err(
+                self.architecture
+                    .translator()
+                    .translate_function(&memory.memory, address),
+            )?,
+        })
     }
 }

@@ -13,32 +13,38 @@ pub struct LValue {
 
 #[pymethods]
 impl LValue {
+    #[getter(variable)]
     fn variable(&self) -> Option<ir::Variable> {
         self.lvalue
             .variable()
             .map(|variable| variable.clone().into())
     }
 
+    #[getter(scalar)]
     fn scalar(&self) -> Option<ir::Scalar> {
         self.lvalue.scalar().map(|scalar| scalar.clone().into())
     }
 
+    #[getter(stack_variable)]
     fn stack_variable(&self) -> Option<ir::StackVariable> {
         self.lvalue
             .stack_variable()
             .map(|stack_variable| stack_variable.clone().into())
     }
 
+    #[getter(dereference)]
     fn derefernce(&self) -> Option<ir::Dereference> {
         self.lvalue
             .dereference()
             .map(|dereference| dereference.clone().into())
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.lvalue.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.lvalue))
     }

@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::Instruction;
@@ -11,29 +10,30 @@ pub struct Block {
 
 #[pymethods]
 impl Block {
+    #[getter(address)]
     fn address(&self) -> Option<u64> {
         self.block.address()
     }
 
+    #[getter(index)]
     fn index(&self) -> usize {
         self.block.index()
     }
 
+    #[getter(instructions)]
     fn instructions(&self) -> Vec<Instruction> {
         self.block
             .instructions()
-            .into_iter()
+            .iter()
             .map(|i| i.clone().into())
             .collect::<Vec<Instruction>>()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.block))
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Block {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.block.to_string())
     }

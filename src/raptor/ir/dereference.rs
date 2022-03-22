@@ -10,10 +10,12 @@ pub struct Dereference {
 
 #[pymethods]
 impl Dereference {
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.dereference.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.dereference))
     }

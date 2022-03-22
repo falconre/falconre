@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::Expression;
@@ -10,21 +9,21 @@ pub struct Edge {
 
 #[pymethods]
 impl Edge {
+    #[getter(condition)]
     fn condition(&self) -> Option<Expression> {
         self.edge.condition().map(|c| c.clone().into())
     }
 
+    #[getter(head)]
     fn head(&self) -> usize {
         self.edge.head()
     }
 
+    #[getter(tail)]
     fn tail(&self) -> usize {
         self.edge.tail()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Edge {
     fn __str__(&self) -> PyResult<String> {
         Ok(self.edge.to_string())
     }

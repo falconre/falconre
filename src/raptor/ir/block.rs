@@ -10,6 +10,7 @@ pub struct Block {
 
 #[pymethods]
 impl Block {
+    #[getter(index)]
     fn index(&self) -> usize {
         self.block.index()
     }
@@ -20,10 +21,11 @@ impl Block {
             .map(|instruction| instruction.clone().into())
     }
 
+    #[getter(instructions)]
     fn instructions(&self) -> Vec<ir::Instruction> {
         self.block
             .instructions()
-            .into_iter()
+            .iter()
             .map(|instruction| instruction.clone().into())
             .collect()
     }

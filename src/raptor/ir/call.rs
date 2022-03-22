@@ -10,6 +10,7 @@ pub struct CallTarget {
 
 #[pymethods]
 impl CallTarget {
+    #[getter(type)]
     fn r#type(&self) -> &str {
         match self.call_target {
             raptor::ir::CallTarget::Expression(_) => "expression",
@@ -18,16 +19,19 @@ impl CallTarget {
         }
     }
 
+    #[getter(expression)]
     fn expression(&self) -> Option<ir::Expression> {
         self.call_target
             .expression()
             .map(|expression| expression.clone().into())
     }
 
+    #[getter(symbol)]
     fn symbol(&self) -> Option<&str> {
         self.call_target.symbol()
     }
 
+    #[getter(function_id)]
     fn function_id(&self) -> Option<usize> {
         self.call_target.function_id()
     }
@@ -47,25 +51,29 @@ pub struct Call {
 
 #[pymethods]
 impl Call {
+    #[getter(target)]
     fn target(&self) -> CallTarget {
         self.call.target().clone().into()
     }
 
+    #[getter(arguments)]
     fn arguments(&self) -> Option<Vec<ir::Expression>> {
         self.call.arguments().map(|arguments| {
             arguments
-                .into_iter()
+                .iter()
                 .map(|argument| argument.clone().into())
                 .collect()
         })
     }
 
+    #[getter(variables_written)]
     fn variables_written(&self) -> Option<Vec<ir::Variable>> {
         self.call
             .variables_written()
-            .map(|vr| vr.into_iter().map(|v| v.clone().into()).collect())
+            .map(|vr| vr.iter().map(|v| v.clone().into()).collect())
     }
 
+    #[getter(variables_read)]
     fn variables_read(&self) -> Option<Vec<ir::Variable>> {
         self.call
             .variables_read()

@@ -97,7 +97,8 @@ pub(crate) fn stack_buffers(
     Ok(stack_buffers)
 }
 
-#[pymodule(raptor_analysis)]
+#[pymodule]
+#[pyo3(name = "raptor_analysis")]
 fn falcon_analysis_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<LocationSet>()?;
     m.add_class::<StackBuffers>()?;

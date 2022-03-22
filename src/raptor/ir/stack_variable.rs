@@ -20,14 +20,17 @@ impl StackVariable {
         }
     }
 
+    #[getter(offset)]
     fn offset(&self) -> isize {
         self.stack_variable.offset()
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.stack_variable.bits()
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.stack_variable))
     }

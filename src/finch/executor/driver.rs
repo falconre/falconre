@@ -4,7 +4,7 @@ use crate::falcon::il;
 use crate::map_err;
 use pyo3::prelude::*;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct Driver {
     pub(crate) driver: finch::executor::Driver,
 }
@@ -33,24 +33,26 @@ impl Driver {
             .map(|drivers| drivers.into_iter().map(|d| Driver { driver: d }).collect())
     }
 
+    #[getter(location)]
     fn location(&self) -> il::ProgramLocation {
         il::ProgramLocation {
             program_location: self.driver.location().clone(),
         }
     }
 
+    #[getter(address)]
     fn address(&self) -> Option<u64> {
         self.driver.address()
     }
 
+    #[getter(instruction)]
     fn instruction(&self) -> Option<il::Instruction> {
         self.driver
             .instruction()
-            .map(|instruction| il::Instruction {
-                instruction: instruction,
-            })
+            .map(|instruction| il::Instruction { instruction })
     }
 
+    #[getter(state)]
     fn state(&self) -> State {
         State {
             state: self.driver.state().clone(),

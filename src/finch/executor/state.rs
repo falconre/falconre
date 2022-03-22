@@ -3,7 +3,7 @@ use crate::falcon::il;
 use crate::map_err;
 use pyo3::prelude::*;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct State {
     pub(crate) state: finch::executor::State,
 }
@@ -20,6 +20,7 @@ impl State {
         }
     }
 
+    #[getter(memory)]
     fn memory(&self) -> Memory {
         self.state.memory().clone().into()
     }
@@ -32,6 +33,7 @@ impl State {
         self.state.scalar(name).map(|s| s.into())
     }
 
+    #[getter(scalars)]
     fn scalars(&self) -> Vec<String> {
         self.state.scalars()
     }

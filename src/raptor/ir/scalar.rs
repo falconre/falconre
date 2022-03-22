@@ -20,24 +20,29 @@ impl Scalar {
         }
     }
 
+    #[getter(name)]
     fn name(&self) -> &str {
         self.scalar.name()
     }
 
+    #[getter(bits)]
     fn bits(&self) -> usize {
         self.scalar.bits()
     }
 
+    #[getter(ssa)]
     fn ssa(&self) -> Option<usize> {
         self.scalar.ssa()
     }
 
+    #[getter(variable)]
     fn variable(&self) -> ir::Variable {
         ir::Variable {
             variable: self.scalar.clone().into(),
         }
     }
 
+    #[getter(json)]
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.scalar))
     }

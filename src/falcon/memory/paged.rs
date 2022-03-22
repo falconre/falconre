@@ -1,3 +1,4 @@
+use crate::map_err;
 use pyo3::prelude::*;
 
 use super::MemoryPermissions;
@@ -16,7 +17,7 @@ impl<V: falcon::memory::Value> Memory<V> {
     }
 
     fn endian(&self) -> Endian {
-        self.memory.endian().clone().into()
+        self.memory.endian().into()
     }
 
     fn permissions(&self, address: u64) -> Option<MemoryPermissions> {
@@ -24,17 +25,11 @@ impl<V: falcon::memory::Value> Memory<V> {
     }
 
     fn store(&mut self, address: u64, value: V) -> PyResult<()> {
-        Ok(self
-            .memory
-            .store(address, value)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+        map_err(self.memory.store(address, value))
     }
 
     fn load(&self, address: u64, bits: usize) -> PyResult<Option<V>> {
-        Ok(self
-            .memory
-            .load(address, bits)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+        map_err(self.memory.load(address, bits))
     }
 }
 
@@ -52,6 +47,7 @@ impl ConstantMemory {
         }
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         self.memory.endian()
     }
@@ -85,6 +81,7 @@ impl ExpressionMemory {
         }
     }
 
+    #[getter(endian)]
     fn endian(&self) -> Endian {
         self.memory.endian()
     }

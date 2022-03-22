@@ -9,10 +9,12 @@ pub struct ControlFlowGraph {
 
 #[pymethods]
 impl ControlFlowGraph {
+    #[getter(entry)]
     fn entry(&self) -> Option<usize> {
         self.control_flow_graph.entry()
     }
 
+    #[getter(blocks)]
     fn blocks(&self) -> Vec<ir::Block> {
         self.control_flow_graph
             .blocks()
@@ -21,6 +23,7 @@ impl ControlFlowGraph {
             .collect()
     }
 
+    #[getter(edges)]
     fn edges(&self) -> Vec<ir::Edge> {
         self.control_flow_graph
             .edges()

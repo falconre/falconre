@@ -2,7 +2,6 @@ pub mod executor;
 
 use crate::map_err;
 use pyo3::prelude::*;
-use pyo3::{wrap_pyfunction, wrap_pymodule};
 
 #[pyfunction]
 fn amd64_standard_load(filename: &str, base_path: Option<String>) -> PyResult<executor::Driver> {
@@ -10,21 +9,21 @@ fn amd64_standard_load(filename: &str, base_path: Option<String>) -> PyResult<ex
     let driver = map_err(finch::platform::linux::Amd64::standard_load(
         filename, base_path,
     ))?;
-    Ok(executor::Driver { driver: driver })
+    Ok(executor::Driver { driver })
 }
 
-#[pymodule(executor)]
-fn finch_executor_module(_py: Python, m: &PyModule) -> PyResult<()> {
+#[pymodule]
+#[pyo3(name = "finch")]
+pub fn register_finch_module(py: Python, parent_module: &PyModule) -> PyResult<()> {
+    let m = PyModule::new(py, "finch")?;
+
     m.add_class::<executor::Driver>()?;
     m.add_class::<executor::Memory>()?;
     m.add_class::<executor::State>()?;
     m.add_class::<executor::Successor>()?;
-    Ok(())
-}
+    m.add_function(wrap_pyfunction!(amd64_standard_load, m)?)?;
 
-#[pymodule(finch)]
-pub fn finch_module(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_wrapped(wrap_pymodule!(executor))?;
-    m.add_wrapped(wrap_pyfunction!(amd64_standard_load))?;
+    parent_module.add_submodule(m)?;
+
     Ok(())
 }

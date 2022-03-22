@@ -17,24 +17,29 @@ impl Function {
         .map(|function| function.into())
     }
 
+    #[getter(address)]
     fn address(&self) -> u64 {
         self.function.address()
     }
 
+    #[getter(index)]
     fn index(&self) -> Option<usize> {
         self.function.index()
     }
 
+    #[getter(control_flow_graph)]
     fn control_flow_graph(&self) -> ir::ControlFlowGraph {
         ir::ControlFlowGraph {
-            control_flow_graph: self.function.control_flow_graph().clone().into(),
+            control_flow_graph: self.function.control_flow_graph().clone(),
         }
     }
 
+    #[getter(name)]
     fn name(&self) -> &str {
         self.function.name()
     }
 
+    #[getter(blocks)]
     fn blocks(&self) -> Vec<ir::Block> {
         self.function
             .blocks()
@@ -47,6 +52,7 @@ impl Function {
         map_err(self.function.block(index)).map(|block| block.clone().into())
     }
 
+    #[getter(edges)]
     fn edges(&self) -> Vec<ir::Edge> {
         self.function
             .edges()

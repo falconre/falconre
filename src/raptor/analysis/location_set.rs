@@ -24,10 +24,11 @@ impl LocationSet {
         self.location_set.insert(location.program_location.clone())
     }
 
+    #[getter(locations)]
     fn locations(&self) -> Vec<ir::ProgramLocation> {
         self.location_set
             .locations()
-            .into_iter()
+            .iter()
             .map(|pl| pl.clone().into())
             .collect()
     }
@@ -35,8 +36,6 @@ impl LocationSet {
 
 impl From<raptor::analysis::LocationSet> for LocationSet {
     fn from(location_set: raptor::analysis::LocationSet) -> LocationSet {
-        LocationSet {
-            location_set: location_set,
-        }
+        LocationSet { location_set }
     }
 }

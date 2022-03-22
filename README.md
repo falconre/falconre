@@ -4,14 +4,14 @@ Falconre is a python3 library using [pyo3](https://github.com/PyO3/pyo3) to wrap
 
   * [Falcon](https://github.com/falconre/falcon) - A binary analysis framework in Rust
   * [Finch](https://github.com/falconre/finch) - A symbolic executor built on Falcon
-  * [Raptor](https://github.com/falconre/raptor) - Higher order IR and analysis on top of Falcon
+  * _[Raptor](https://github.com/falconre/raptor) - Higher order IR and analysis on top of Falcon_ Raptor support is currently disabled.
 
 This is alpha-quality software.
 
 ## What is this really?
 
 This is me (endeav0r) hacking on Falcon and other things to try and automate
-different simple static analysis tasks.
+different analysis tasks. This library remains in flux.
 
 Here are some things you can try:
 
@@ -88,14 +88,7 @@ Install rust:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-You'll need this thing called "Rust nightly":
-
-```
-rustup toolchain install nightly
-rustup default nightly
-```
-
-Get the dependencies
+Get the dependencies. _Note: You must have capstone 4.0.2 to use falcon._
 
 ```
 brew install z3 capstone

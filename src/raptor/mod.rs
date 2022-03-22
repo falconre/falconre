@@ -47,21 +47,15 @@ fn translate_program_parallel(
             .program
             .functions()
             .par_iter()
-            .map(|function| function_translator.translate_function(&function))
-            .try_fold(
-                || Vec::new(),
-                |mut functions, function| {
-                    functions.push(function?);
-                    Ok(functions)
-                },
-            )
-            .try_reduce(
-                || Vec::new(),
-                |mut l, mut r| {
-                    l.append(&mut r);
-                    Ok(l)
-                },
-            );
+            .map(|function| function_translator.translate_function(function))
+            .try_fold(Vec::new, |mut functions, function| {
+                functions.push(function?);
+                Ok(functions)
+            })
+            .try_reduce(Vec::new, |mut l, mut r| {
+                l.append(&mut r);
+                Ok(l)
+            });
         map_err(functions)
     }
 
@@ -73,7 +67,7 @@ fn translate_program_parallel(
         &elf.elf,
     ))?;
 
-    let functions = translate(program_translator.function_translator(), &program)?;
+    let functions = translate(program_translator.function_translator(), program)?;
 
     let mut program = raptor::ir::Program::new();
     for function in functions {
@@ -81,10 +75,11 @@ fn translate_program_parallel(
         program.replace_function(index, function);
     }
 
-    Ok(ir::Program { program: program })
+    Ok(ir::Program { program })
 }
 
-#[pymodule(ir)]
+#[pymodule]
+#[pyo3(name = "ir")]
 fn raptor_ir_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<ir::Block>()?;
     m.add_class::<ir::Constant>()?;
@@ -107,7 +102,8 @@ fn raptor_ir_module(_py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
-#[pymodule(raptor)]
+#[pymodule]
+#[pyo3(name = "raptor")]
 pub fn raptor_module(py: Python, m: &PyModule) -> PyResult<()> {
     use analysis::PyInit_raptor_analysis;
 

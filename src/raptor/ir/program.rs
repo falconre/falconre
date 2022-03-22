@@ -17,6 +17,7 @@ impl Program {
         .map(|program| program.into())
     }
 
+    #[getter(functions)]
     fn functions(&self) -> Vec<ir::Function> {
         self.program
             .functions()

@@ -9,6 +9,7 @@ pub struct Operation {
 
 #[pymethods]
 impl Operation {
+    #[getter(type)]
     fn r#type(&self) -> &str {
         match self.operation {
             raptor::ir::Operation::Assign { .. } => "assign",
@@ -18,34 +19,40 @@ impl Operation {
             raptor::ir::Operation::Call(_) => "call",
             raptor::ir::Operation::Intrinsic(_) => "intrinsic",
             raptor::ir::Operation::Return(_) => "return",
-            raptor::ir::Operation::Nop => "nop",
+            raptor::ir::Operation::Nop(_) => "nop",
         }
     }
 
+    #[getter(variables_written)]
     fn variables_written(&self) -> Option<Vec<ir::Variable>> {
         self.operation
             .variables_written()
             .map(|vw| vw.into_iter().map(|v| v.clone().into()).collect())
     }
 
+    #[getter(variables_read)]
     fn variables_read(&self) -> Option<Vec<ir::Variable>> {
         self.operation
             .variables_read()
             .map(|vw| vw.into_iter().map(|v| v.clone().into()).collect())
     }
 
+    #[getter(call)]
     fn call(&self) -> Option<ir::Call> {
         self.operation.call().map(|call| call.clone().into())
     }
 
+    #[getter(src)]
     fn src(&self) -> Option<ir::Expression> {
         self.operation.src().map(|e| e.clone().into())
     }
 
+    #[getter(dst)]
     fn dst(&self) -> Option<ir::Variable> {
         self.operation.dst().map(|e| e.clone().into())
     }
 
+    #[getter(index)]
     fn index(&self) -> Option<ir::Expression> {
         self.operation.index().map(|e| e.clone().into())
     }
