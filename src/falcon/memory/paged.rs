@@ -27,18 +27,18 @@ impl<V: falcon::memory::Value> Memory<V> {
         Ok(self
             .memory
             .store(address, value)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+            .map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))?)
     }
 
     fn load(&self, address: u64, bits: usize) -> PyResult<Option<V>> {
         Ok(self
             .memory
             .load(address, bits)
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?)
+            .map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))?)
     }
 }
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct ConstantMemory {
     memory: Memory<falcon::il::Constant>,
 }
@@ -71,7 +71,7 @@ impl ConstantMemory {
     }
 }
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct ExpressionMemory {
     memory: Memory<falcon::il::Expression>,
 }

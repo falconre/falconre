@@ -3,7 +3,7 @@ use pyo3::prelude::*;
 
 use super::Function;
 
-#[pyclass]
+#[pyclass(unsendable)]
 pub struct Program {
     pub(crate) program: falcon::il::Program,
 }

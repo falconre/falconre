@@ -1,7 +1,6 @@
 use crate::falcon::il;
 use crate::map_err;
 use pyo3::prelude::*;
-use pyo3::wrap_pyfunction;
 use std::collections::HashMap;
 
 mod constants;
@@ -44,7 +43,8 @@ pub(crate) fn use_def(
 }
 
 #[pyfunction]
-pub fn constants(function: &il::Function) -> PyResult<HashMap<il::ProgramLocation, Constants>> {
+#[pyo3(name = "constants")]
+pub fn py_constants(function: &il::Function) -> PyResult<HashMap<il::ProgramLocation, Constants>> {
     map_err(falcon::analysis::constants::constants(&function.function)).map(|rd| {
         rd.into_iter()
             .map(|(pl, cs)| (pl.into(), cs.into()))
@@ -52,13 +52,14 @@ pub fn constants(function: &il::Function) -> PyResult<HashMap<il::ProgramLocatio
     })
 }
 
-#[pymodule(analysis)]
-fn falcon_analysis_module(_py: Python, m: &PyModule) -> PyResult<()> {
+pub fn register_analysis(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "analysis")?;
     m.add_class::<Constants>()?;
     m.add_class::<LocationSet>()?;
-    m.add_wrapped(wrap_pyfunction!(constants))?;
-    m.add_wrapped(wrap_pyfunction!(def_use))?;
-    m.add_wrapped(wrap_pyfunction!(reaching_definitions))?;
-    m.add_wrapped(wrap_pyfunction!(use_def))?;
+    m.add_function(wrap_pyfunction!(py_constants, &m)?)?;
+    m.add_function(wrap_pyfunction!(def_use, &m)?)?;
+    m.add_function(wrap_pyfunction!(reaching_definitions, &m)?)?;
+    m.add_function(wrap_pyfunction!(use_def, &m)?)?;
+    parent.add_submodule(&m)?;
     Ok(())
 }

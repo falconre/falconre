@@ -13,7 +13,7 @@ impl MemoryPermissions {
     #[new]
     fn new(bits: u32) -> PyResult<MemoryPermissions> {
         let memory_permissions = falcon::memory::MemoryPermissions::from_bits(bits).ok_or(
-            pyo3::exceptions::Exception::py_err("Invalid bits for MemoryPermissions"),
+            pyo3::exceptions::PyException::new_err("Invalid bits for MemoryPermissions"),
         )?;
         Ok(MemoryPermissions {
             memory_permissions: memory_permissions,

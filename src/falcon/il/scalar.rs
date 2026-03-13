@@ -1,6 +1,5 @@
 use super::Expression;
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -34,16 +33,13 @@ impl Scalar {
             expression: self.scalar.clone().into(),
         }
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Scalar {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.scalar.to_string())
+    fn __str__(&self) -> String {
+        self.scalar.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.scalar.to_string())
+    fn __repr__(&self) -> String {
+        self.scalar.to_string()
     }
 }
 

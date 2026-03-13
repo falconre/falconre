@@ -5,17 +5,30 @@ pub mod loader;
 pub mod memory;
 
 use pyo3::prelude::*;
-use pyo3::wrap_pymodule;
 
-#[pymodule(architecture)]
-fn falcon_architecture_module(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<architecture::Endian>()?;
-    m.add_class::<architecture::Architecture>()?;
+pub fn register_falcon(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "falcon")?;
+
+    analysis::register_analysis(&m)?;
+    register_architecture(&m)?;
+    register_il(&m)?;
+    register_loader(&m)?;
+    register_memory(&m)?;
+
+    parent.add_submodule(&m)?;
     Ok(())
 }
 
-#[pymodule(il)]
-fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_architecture(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "architecture")?;
+    m.add_class::<architecture::Endian>()?;
+    m.add_class::<architecture::Architecture>()?;
+    parent.add_submodule(&m)?;
+    Ok(())
+}
+
+fn register_il(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "il")?;
     m.add_class::<il::Block>()?;
     m.add_class::<il::Constant>()?;
     m.add_class::<il::ControlFlowGraph>()?;
@@ -28,35 +41,26 @@ fn falcon_il_module(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<il::Program>()?;
     m.add_class::<il::ProgramLocation>()?;
     m.add_class::<il::Scalar>()?;
+    parent.add_submodule(&m)?;
     Ok(())
 }
 
-#[pymodule(loader)]
-fn falcon_loader_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_loader(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "loader")?;
     m.add_class::<loader::Elf>()?;
     m.add_class::<loader::FunctionEntry>()?;
     m.add_class::<loader::Symbol>()?;
     m.add_class::<loader::Pe>()?;
+    parent.add_submodule(&m)?;
     Ok(())
 }
 
-#[pymodule(memory)]
-fn falcon_memory_module(_py: Python, m: &PyModule) -> PyResult<()> {
+fn register_memory(parent: &Bound<'_, PyModule>) -> PyResult<()> {
+    let m = PyModule::new(parent.py(), "memory")?;
     m.add_class::<memory::backing::Section>()?;
     m.add_class::<memory::backing::Memory>()?;
     m.add_class::<memory::paged::ConstantMemory>()?;
     m.add_class::<memory::paged::ExpressionMemory>()?;
-    Ok(())
-}
-
-#[pymodule(falcon)]
-pub fn falcon_module(_py: Python, m: &PyModule) -> PyResult<()> {
-    use crate::falcon::analysis::PyInit_analysis;
-
-    m.add_wrapped(wrap_pymodule!(analysis))?;
-    m.add_wrapped(wrap_pymodule!(architecture))?;
-    m.add_wrapped(wrap_pymodule!(il))?;
-    m.add_wrapped(wrap_pymodule!(loader))?;
-    m.add_wrapped(wrap_pymodule!(memory))?;
+    parent.add_submodule(&m)?;
     Ok(())
 }

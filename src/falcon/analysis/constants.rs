@@ -1,7 +1,7 @@
 use crate::falcon::il;
 use pyo3::prelude::*;
 
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone)]
 pub struct Constants {
     pub(crate) constants: falcon::analysis::constants::Constants,
