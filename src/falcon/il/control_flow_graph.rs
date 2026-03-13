@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::{Block, Edge};
@@ -65,16 +64,13 @@ impl ControlFlowGraph {
     fn dot_graph(&self) -> String {
         self.control_flow_graph.graph().dot_graph()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for ControlFlowGraph {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.control_flow_graph.to_string())
+    fn __str__(&self) -> String {
+        self.control_flow_graph.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.control_flow_graph.to_string())
+    fn __repr__(&self) -> String {
+        self.control_flow_graph.to_string()
     }
 }
 

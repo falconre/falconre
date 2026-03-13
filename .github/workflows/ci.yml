@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake libclang-dev
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cargo build
+        run: cargo build
+
+      - name: Cargo test
+        run: cargo test
+
+      - name: Smoke test Python import
+        run: |
+          cp target/debug/libfalconre.so falconre/falconre.so
+          python -c "from falconre.falconre import falcon; print('ok')"

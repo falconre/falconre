@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::Instruction;
@@ -30,16 +29,13 @@ impl Block {
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.block))
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Block {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.block.to_string())
+    fn __str__(&self) -> String {
+        self.block.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.block.to_string())
+    fn __repr__(&self) -> String {
+        self.block.to_string()
     }
 }
 

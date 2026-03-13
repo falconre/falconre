@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use crate::falcon::architecture::Architecture;
@@ -19,22 +18,19 @@ impl FunctionEntry {
     fn name(&self) -> Option<String> {
         self.function_entry.name().map(|s| s.to_string())
     }
+
+    fn __str__(&self) -> String {
+        self.function_entry.to_string()
+    }
+
+    fn __repr__(&self) -> String {
+        self.function_entry.to_string()
+    }
 }
 
 impl From<falcon::loader::FunctionEntry> for FunctionEntry {
     fn from(function_entry: falcon::loader::FunctionEntry) -> FunctionEntry {
         FunctionEntry { function_entry }
-    }
-}
-
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for FunctionEntry {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.function_entry.to_string())
-    }
-
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.function_entry.to_string())
     }
 }
 
@@ -64,7 +60,7 @@ trait FalconreLoader: falcon::loader::Loader {
     fn falconre_memory(&self) -> PyResult<crate::falcon::memory::backing::Memory> {
         Ok(self
             .memory()
-            .map_err(|e| pyo3::exceptions::Exception::py_err(format!("{}", e)))?
+            .map_err(|e| pyo3::exceptions::PyException::new_err(format!("{}", e)))?
             .into())
     }
 
@@ -91,15 +87,20 @@ trait FalconreLoader: falcon::loader::Loader {
     }
 
     fn falconre_program_verbose(&self) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        map_err(self.program_verbose().map(|(program, errors)| {
-            (
-                program.into(),
-                errors
-                    .into_iter()
-                    .map(|(function_entry, error)| (function_entry.into(), error.to_string()))
-                    .collect(),
-            )
-        }))
+        map_err(
+            self.program_verbose(&falcon::translator::Options::default())
+                .map(|(program, errors)| {
+                    (
+                        program.into(),
+                        errors
+                            .into_iter()
+                            .map(|(function_entry, error)| {
+                                (function_entry.into(), error.to_string())
+                            })
+                            .collect(),
+                    )
+                }),
+        )
     }
 
     fn falconre_program_recursive(&self) -> PyResult<il::Program> {
@@ -109,15 +110,20 @@ trait FalconreLoader: falcon::loader::Loader {
     fn falconre_program_recursive_verbose(
         &self,
     ) -> PyResult<(il::Program, Vec<(FunctionEntry, String)>)> {
-        map_err(self.program_recursive_verbose().map(|(program, errors)| {
-            (
-                program.into(),
-                errors
-                    .into_iter()
-                    .map(|(function_entry, error)| (function_entry.into(), error.to_string()))
-                    .collect(),
-            )
-        }))
+        map_err(
+            self.program_recursive_verbose(&falcon::translator::Options::default())
+                .map(|(program, errors)| {
+                    (
+                        program.into(),
+                        errors
+                            .into_iter()
+                            .map(|(function_entry, error)| {
+                                (function_entry.into(), error.to_string())
+                            })
+                            .collect(),
+                    )
+                }),
+        )
     }
 }
 

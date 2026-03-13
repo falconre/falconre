@@ -1,4 +1,3 @@
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::Expression;
@@ -21,16 +20,13 @@ impl Edge {
     fn tail(&self) -> usize {
         self.edge.tail()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Edge {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.edge.to_string())
+    fn __str__(&self) -> String {
+        self.edge.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.edge.to_string())
+    fn __repr__(&self) -> String {
+        self.edge.to_string()
     }
 }
 

@@ -1,5 +1,4 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::Scalar;
@@ -56,16 +55,13 @@ impl Operation {
     fn json(&self) -> PyResult<String> {
         map_err(serde_json::to_string(&self.operation))
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for Operation {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.operation.to_string())
+    fn __str__(&self) -> String {
+        self.operation.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.operation.to_string())
+    fn __repr__(&self) -> String {
+        self.operation.to_string()
     }
 }
 

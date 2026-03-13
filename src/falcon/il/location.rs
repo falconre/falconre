@@ -1,10 +1,9 @@
 use crate::map_err;
-use pyo3::class::PyObjectProtocol;
 use pyo3::prelude::*;
 
 use super::{Function, Program};
 
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct ProgramLocation {
     pub(crate) program_location: falcon::il::ProgramLocation,
@@ -48,16 +47,13 @@ impl ProgramLocation {
             },
         )
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for ProgramLocation {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.program_location.to_string())
+    fn __str__(&self) -> String {
+        self.program_location.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.program_location.to_string())
+    fn __repr__(&self) -> String {
+        self.program_location.to_string()
     }
 }
 
@@ -81,16 +77,13 @@ impl FunctionLocation {
     fn instruction_index(&self) -> Option<usize> {
         self.function_location.instruction_index()
     }
-}
 
-#[pyproto]
-impl<'p> PyObjectProtocol<'p> for FunctionLocation {
-    fn __str__(&self) -> PyResult<String> {
-        Ok(self.function_location.to_string())
+    fn __str__(&self) -> String {
+        self.function_location.to_string()
     }
 
-    fn __repr__(&self) -> PyResult<String> {
-        Ok(self.function_location.to_string())
+    fn __repr__(&self) -> String {
+        self.function_location.to_string()
     }
 }
 
